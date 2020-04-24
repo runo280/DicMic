@@ -186,7 +186,6 @@
         <Compile Include="MainWindow.xaml.cs">
           <DependentUpon>MainWindow.xaml</DependentUpon>
         </Compile>
-        <Compile Include="TextSelectionReader.cs" />
         <Compile Include="App.xaml.cs">
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
