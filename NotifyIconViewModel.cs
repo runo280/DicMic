@@ -19,11 +19,13 @@ namespace MiDic
             {
                 return new DelegateCommand
                 {
-                    CanExecuteFunc = () => Application.Current.MainWindow == null,
+                    CanExecuteFunc = () => Application.Current != null,
                     CommandAction = () =>
                     {
-                        Application.Current.MainWindow = new MainWindow();
+                        // Application.Current.MainWindow = new PrimeWindow();
+                        Application.Current.MainWindow.WindowState = WindowState.Normal;
                         Application.Current.MainWindow.Show();
+                        Application.Current.MainWindow.Activate();
                     }
                 };
             }
@@ -38,7 +40,11 @@ namespace MiDic
             {
                 return new DelegateCommand
                 {
-                    CommandAction = () => Application.Current.MainWindow.Close(),
+                    CommandAction = () =>
+                    {
+                        Application.Current.MainWindow.Hide();
+                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                    },
                     CanExecuteFunc = () => Application.Current.MainWindow != null
                 };
             }
@@ -50,10 +56,7 @@ namespace MiDic
         /// </summary>
         public ICommand ExitApplicationCommand
         {
-            get
-            {
-                return new DelegateCommand {CommandAction = () => Application.Current.Shutdown()};
-            }
+            get { return new DelegateCommand {CommandAction = () => Application.Current.Shutdown()}; }
         }
     }
 }
