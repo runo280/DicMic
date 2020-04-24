@@ -5,10 +5,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:MiDic"
         mc:Ignorable="d"
+        WindowStyle="None"
         Loaded="MainWindow_OnLoaded"
         Closed="MainWindow_OnClosed"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Label x:Name="Label"></Label>
+        Title="MainWindow" Height="300" Width="800">
+    <Grid Margin="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="45*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="45*" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Padding="8" x:Name="LblEnglish" Background="Beige" TextWrapping="Wrap" Margin="4" Text="English" Grid.Column="0" />
+        <TextBlock Padding="8" x:Name="LblPersian" Background="Beige" TextWrapping="Wrap" Margin="4" Text="فارسی" Grid.Column="2" FlowDirection="RightToLeft" />
+
+        <Button x:Name="BtnTranslate" Content="Translate" Margin="4" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="BtnSave" Content="Save" Margin="4" Grid.Column="3"></Button>
     </Grid>
 </Window>

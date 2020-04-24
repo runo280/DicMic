@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using Gma.System.MouseKeyHook;
+using GoogleTranslateFreeApi;
 using Clipboard = System.Windows.Clipboard;
 
 namespace MiDic
@@ -62,8 +66,8 @@ namespace MiDic
                         var selectedText = Clipboard.GetText().Trim();
                         if (selectedText.Length > 1)
                         {
-                            ShowMainWindow();
-                            Label.Content = selectedText;
+                            LblEnglish.Text = selectedText;
+                            Translate();
                             Clipboard.Clear();
                         }
                     }
@@ -86,6 +90,28 @@ namespace MiDic
             }
 
             return IntPtr.Zero;
+        }
+
+        private async void Translate()
+        {
+            if (LblEnglish.Text.Trim().Length >= 0)
+            {
+                var translator = new GoogleTranslator();
+
+                Language from = GoogleTranslateFreeApi.Language.English;
+                Language to = GoogleTranslateFreeApi.Language.Persian;
+
+                TranslationResult result = await translator.TranslateLiteAsync(LblEnglish.Text.Trim(), from, to);
+
+                //The result is separated by the suggestions and the '\n' symbols
+                string[] resultSeparated = result.FragmentedTranslation;
+                
+                //You can get all text using MergedTranslation property
+                string resultMerged = result.MergedTranslation;
+                LblPersian.Text = resultMerged;
+                //There is also original text transcription
+                string transcription = result.TranslatedTextTranscription;
+            }
         }
 
         private IKeyboardMouseEvents _globalHook;
@@ -115,7 +141,7 @@ namespace MiDic
                     Combination.FromString("Pause"), () =>
                     {
                         CopyFromActiveProgram();
-                        // ShowMainWindow();
+                        ShowMainWindow();
                     }
                 },
                 {
