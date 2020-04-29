@@ -6,20 +6,42 @@
         xmlns:local="clr-namespace:MiDic"
         mc:Ignorable="d"
         WindowStyle="None"
+        ShowInTaskbar="False"
         Loaded="MainWindow_OnLoaded"
         Closed="MainWindow_OnClosed"
-        Title="MainWindow" Height="300" Width="800">
-    <Grid Margin="4">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="45*" />
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="45*" />
-            <ColumnDefinition Width="5*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Padding="8" x:Name="LblEnglish" Background="Beige" TextWrapping="Wrap" Margin="4" Text="English" Grid.Column="0" />
-        <TextBlock Padding="8" x:Name="LblPersian" Background="Beige" TextWrapping="Wrap" Margin="4" Text="فارسی" Grid.Column="2" FlowDirection="RightToLeft" />
+        MouseDown="Window_MouseDown"
+        SizeToContent="WidthAndHeight"
+        Title="MainWindow">
+    <Grid Margin="4" Height="400" Width="400">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
 
-        <Button x:Name="BtnTranslate" Content="Translate" Margin="4" Grid.Column="1" RenderTransformOrigin="0.5,0.5"/>
-        <Button x:Name="BtnSave" Content="Save" Margin="4" Grid.Column="3"></Button>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height=".8*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height=".8*" />
+            </Grid.RowDefinitions>
+            <TextBox Padding="8" x:Name="LblEnglish" Background="Beige" TextWrapping="Wrap" Margin="4" Text="English" Grid.Row="0" />
+            <TextBox Padding="8" x:Name="LblPersian" Background="Beige" TextWrapping="Wrap" Margin="4" Text="فارسی" Grid.Row="2" FlowDirection="RightToLeft" />
+
+            <Button x:Name="BtnTranslate" Click="BtnTranslate_OnClick" Content="Translate" Margin="4" Grid.Row="1" RenderTransformOrigin="0.5,0.5"/>
+            <Button IsEnabled="False" x:Name="BtnSave" Click="BtnSave_OnClick" Content="Save" Margin="4" Grid.Row="3"></Button>
+        </Grid>
+        <Grid Margin="4" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BtnView" Click="BtnView_Click" Content="View saved items" Grid.Column="0"></Button>
+            <Button x:Name="BtnExport" Click="BtnExport_Click" Content="Export saved items" Margin="4,0,0,0" Grid.Column="1"></Button>
+            <Button x:Name="BtnEmptyDb" Click="BtnEmptyDb_Click" Content="Delete saved items" Margin="4,0,0,0" Grid.Column="2"></Button>
+
+        </Grid>
     </Grid>
 </Window>

@@ -6,10 +6,13 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 using Gma.System.MouseKeyHook;
 using GoogleTranslateFreeApi;
+using LiteDB;
 using Clipboard = System.Windows.Clipboard;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace MiDic
 {
@@ -105,12 +108,13 @@ namespace MiDic
 
                 //The result is separated by the suggestions and the '\n' symbols
                 string[] resultSeparated = result.FragmentedTranslation;
-                
+
                 //You can get all text using MergedTranslation property
                 string resultMerged = result.MergedTranslation;
                 LblPersian.Text = resultMerged;
                 //There is also original text transcription
                 string transcription = result.TranslatedTextTranscription;
+                BtnSave.IsEnabled = true;
             }
         }
 
@@ -174,6 +178,68 @@ namespace MiDic
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
             UnregisterClipboardViewer();
+        }
+
+        private void saveToDb(string str)
+        {
+            BtnSave.IsEnabled = false;
+            using (var db = new LiteDatabase(@"MyData.db"))
+            {
+                var col = db.GetCollection<Word>("words");
+                var word = new Word
+                {
+                    Origin = LblEnglish.Text.Trim(), Translation = str
+                };
+                var results = col.Query()
+                    .Where(x => x.Origin == LblEnglish.Text.Trim())
+                    .ToList();
+                if (results.Count == 0) col.Insert(word);
+            }
+            BtnSave.IsEnabled = true;
+        }
+
+        private void BtnSave_OnClick(object sender, RoutedEventArgs e)
+        {
+            saveToDb(LblPersian.Text.Trim());
+        }
+        
+        private void BtnTranslate_OnClick(object sender, RoutedEventArgs e)
+        {
+            using (var db = new LiteDatabase(@"MyData.db"))
+            {
+                var col = db.GetCollection<Word>("words");
+                
+                var results = col.Query().ToList();
+                var all = "";
+                foreach (var word in results)
+                {
+                    // MessageBox.Show($"{word.Origin} : {word.Translation}");
+                    all += $"{word.Origin} : {word.Translation}\n";
+                }
+
+                LblPersian.Text = all;
+            }
+        }
+
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnEmptyDb_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnView_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
     }
 }
