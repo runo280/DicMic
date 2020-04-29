@@ -228,7 +228,14 @@ namespace MiDic
 
         private void BtnEmptyDb_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                using (var db = new LiteDatabase(@"MyData.db"))
+                {
+                    db.DropCollection("words");
+                }
+            }
         }
 
         private void BtnView_Click(object sender, RoutedEventArgs e)
