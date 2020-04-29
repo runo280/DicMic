@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -205,25 +206,22 @@ namespace MiDic
         
         private void BtnTranslate_OnClick(object sender, RoutedEventArgs e)
         {
-            using (var db = new LiteDatabase(@"MyData.db"))
-            {
-                var col = db.GetCollection<Word>("words");
-                
-                var results = col.Query().ToList();
-                var all = "";
-                foreach (var word in results)
-                {
-                    // MessageBox.Show($"{word.Origin} : {word.Translation}");
-                    all += $"{word.Origin} : {word.Translation}\n";
-                }
-
-                LblPersian.Text = all;
-            }
+            
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
-
+            var fileName = @"SavedList_" + GetTimeDate() + ".txt";
+            using (var db = new LiteDatabase(@"MyData.db"))
+            {
+                var col = db.GetCollection<Word>("words");
+                var results = col.Query().ToList();
+                using (TextWriter tw = new StreamWriter(fileName))
+                {
+                    foreach (Word w in results)
+                        tw.WriteLine(w.Origin + ";" + w.Translation);
+                }
+            }
         }
 
         private void BtnEmptyDb_Click(object sender, RoutedEventArgs e)
@@ -248,6 +246,11 @@ namespace MiDic
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
+        }
+
+        public static string GetTimeDate()
+        {
+            return System.DateTime.Now.ToString("yyyy-MM-dd-_HH-mm-ss");
         }
     }
 }
