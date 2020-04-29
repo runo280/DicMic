@@ -233,7 +233,8 @@ namespace MiDic
 
         private void BtnView_Click(object sender, RoutedEventArgs e)
         {
-
+            var view = new SavedItems();
+            view.Show();
         }
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

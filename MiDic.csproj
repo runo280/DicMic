@@ -204,8 +204,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="SavedItems.xaml.cs">
+      <DependentUpon>SavedItems.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Word.cs" />
     <Page Include="MainWindow.xaml" />
+    <Page Include="SavedItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
