@@ -100,6 +100,8 @@ namespace MiDic
         {
             if (LblEnglish.Text.Trim().Length >= 0)
             {
+                BtnSave.IsEnabled = false;
+                BtnTranslate.IsEnabled = false;
                 var translator = new GoogleTranslator();
 
                 Language from = GoogleTranslateFreeApi.Language.English;
@@ -116,6 +118,7 @@ namespace MiDic
                 //There is also original text transcription
                 string transcription = result.TranslatedTextTranscription;
                 BtnSave.IsEnabled = true;
+                BtnTranslate.IsEnabled = true;
             }
         }
 
@@ -201,12 +204,26 @@ namespace MiDic
 
         private void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {
+            BtnSave.IsEnabled = false;
             saveToDb(LblPersian.Text.Trim());
+            BtnSave.Content = "Saved";
+            Task.Delay(2000).ContinueWith(t => {
+                BtnSave.Dispatcher.Invoke(() => {
+                    BtnSave.Content = "Save";
+                    BtnSave.IsEnabled = true;
+                });
+                
+            });
+
         }
         
         private void BtnTranslate_OnClick(object sender, RoutedEventArgs e)
         {
-            
+            BtnTranslate.IsEnabled = false;
+            BtnSave.IsEnabled = false;
+            Translate();
+            BtnTranslate.IsEnabled = true;
+            BtnSave.IsEnabled = true;
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
@@ -240,6 +257,7 @@ namespace MiDic
         {
             var view = new SavedItems();
             view.Show();
+            HideMainWindow();
         }
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
